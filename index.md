@@ -7,4 +7,5 @@ function(array: AsyncArray, cb: (result: Number) => void) {
 
 }
 ```
-[Результат](./result.html)
+[Собранная страница](./result.html) <br />
+[Функция](./function.js)
