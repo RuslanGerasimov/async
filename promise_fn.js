@@ -1,3 +1,8 @@
+/**
+ * Проверка объекта на итерируемость
+ * @param obj
+ * @returns {boolean}
+ */
 function isIterable(obj) {
     if (obj == null) {
         return false;
@@ -5,6 +10,11 @@ function isIterable(obj) {
     return typeof obj[Symbol.iterator] === 'function';
 }
 
+/**
+ * Проверка на то, что в итерируемом объекте только промисы
+ * @param {array|Set|Map} promises
+ * @returns {{result: boolean, message: string}}
+ */
 function checkIfIterableOfPromises(promises) {
     if (!isIterable(promises)) {
         return {result: false, message: "argument must be iterable"};
@@ -18,6 +28,12 @@ function checkIfIterableOfPromises(promises) {
     return {result: true, message: "ok"};
 }
 
+/**
+ * Возвращает успешный промис с значением первого успешного промиса или
+ * неуспешный промис с массивом значений всех неуспешных промисов (если все промисы отклонены)
+ * @param {array|Set|map} promises
+ * @returns {Promise}
+ */
 Promise._any = function (promises) {
     const {result, message} = checkIfIterableOfPromises(promises);
     if (!result) {
@@ -41,6 +57,12 @@ Promise._any = function (promises) {
     })
 };
 
+/**
+ * Возвращает промис, исполняемый после завершения всех промисов и
+ * содержащий массив результатов исполнения всех промисов
+ * @param {array|Set|map} promises
+ * @returns {Promise<array>}
+ */
 Promise._allSettled = function (promises) {
     const {result, message} = checkIfIterableOfPromises(promises);
     if (!result) {
@@ -68,6 +90,12 @@ Promise._allSettled = function (promises) {
     });
 };
 
+/**
+ * После выполнения промиса исполняет колбэк, после чего возвращает промис.
+ * @param {function} cb
+ * @param {array} args
+ * @returns {Promise}
+ */
 Promise.prototype._finally = function(cb, args = null) {
     if(typeof cb !== "function") {
         throw new Error("cb must be a function");
@@ -77,11 +105,11 @@ Promise.prototype._finally = function(cb, args = null) {
         throw new Error("args must be an array or null");
     }
 
-    return this.then((data) => {
+    return this.then(() => {
         cb.call(null, ...args);
-        return Promise.resolve(data);
-    }, (err) => {
+        return this;
+    }, () => {
         cb.call(null, ...args);
-        return Promise.reject(err);
+        return this;
     })
 };
