@@ -8,4 +8,10 @@ function(array: AsyncArray, cb: (result: Number) => void) {
 }
 ```
 [Собранная страница](./result.html) <br />
-[Функция](./function.js)
+[Функция (getSumOddNumbersInArray)](./function.js)
+####Дополнительное задание
+- Promise._any
+- Promise._allSettled
+- Promise.prototype._finally
+
+[Ссылка на страницу с решением](./promise_fn.js)
