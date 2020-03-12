@@ -1,3 +1,15 @@
+/**
+ * Основаная функция (сложение нечетных чисел в массиве)
+ * @param {array|AsyncArray} arData
+ * @param {function}cb
+ */
+function getSumOddNumbersInArray(arData, cb) {
+    if (!(arData instanceof Homework.AsyncArray)) {
+        arData = new Homework.AsyncArray(arData);
+    }
+    recursiveSum(arData, 0, false, cb);
+}
+
 function checkIfEven(a, cb) {
     Homework.mod(a, 2, (result) => {
         Homework.equal(result, 0, (isEven) => {
@@ -24,7 +36,7 @@ function addOddEvenToResult(result, b, isEvenMode, cb) {
 function recursiveSum(arData, result, $isEven, cb) {
     arData.pop((item) => {
         const itemType = typeof item;
-        //Обработка завершения массива (массив законичлся если вернулся undefined и длина массива - 0)
+        //Обработка завершения массива (массив закончился, если вернулся undefined и длина массива - 0)
         if (!item) {
             Homework.equal(itemType, "undefined", () => {
                 arData.length((arLength) => {
@@ -47,11 +59,4 @@ function recursiveSum(arData, result, $isEven, cb) {
             });
         }
     });
-}
-
-function getSumOddNumbersInArray(arData, cb) {
-    if (!(arData instanceof Homework.AsyncArray)) {
-        arData = new Homework.AsyncArray(arData);
-    }
-    recursiveSum(arData, 0, false, cb);
 }

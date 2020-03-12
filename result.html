@@ -4,6 +4,7 @@
         <title>Демонстрация работы функции</title>
         <script src="shri-async-hw.js"></script>
         <script src="function.js"></script>
+        <script src="promise_fn.js"></script>
         <script>
             const enterArray = [2, 4, 5, 6, 9, undefined, 6, 'a', 'b', '3', ['2'], undefined, null, 1, undefined];
         </script>
@@ -25,6 +26,35 @@
                 console.log("Входной массив: " + enterArray.toString(), "результат - " + res);
             })
         });
+
+
+        const settled = Promise._allSettled([
+            new Promise((res, rej) => { setTimeout(() => { rej(1) }, 2500) }),
+            new Promise((res, rej) => { setTimeout(() => { res(3) }, 1500) }),
+            new Promise((res, rej) => { setTimeout(() => { rej(2) }, 500) }),
+        ]);
+        settled
+            .then((a) => {console.log("Success", a)})
+            .catch((b) => { console.log("error", b) });
+
+        const anyPromise = Promise._any([
+            new Promise((res, rej) => { setTimeout(() => { rej(1) }, 2500) }),
+            new Promise((res, rej) => { setTimeout(() => { res(3) }, 1500) }),
+            new Promise((res, rej) => { setTimeout(() => { rej(2) }, 500) }),
+        ])
+        anyPromise
+            .then((res) => {console.log("First success", res)})
+            .catch((err) => { console.log("All rejected", err) });
+
+
+        const  jusPromise = new Promise((res, rej) => { setTimeout(() => { rej(2) }, 1700) });
+        jusPromise._finally((someArg) => {
+            console.log("Finally", someArg);
+        }, ["argValue"]).then((res) => {
+            console.log("Success " + res);
+        }).catch((err) => {
+            console.log("Failure " + err);
+        })
     </script>
     </body>
 </html>
